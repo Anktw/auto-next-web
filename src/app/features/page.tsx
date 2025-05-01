@@ -3,7 +3,12 @@ import Image from "next/image"
 import { ArrowLeft, Code, Rocket, Terminal, Zap, Globe, Laptop } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Features: Auto-Next",
+  description: "Auto npm run dev in nextjs project-> Features page",
+};
 export default function FeaturesPage() {
   return (
     <div className="flex min-h-screen flex-col">

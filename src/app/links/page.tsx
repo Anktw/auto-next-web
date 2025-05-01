@@ -3,6 +3,13 @@ import { ArrowLeft, Code, ExternalLink, Github, Globe, Laptop, Mail, Twitter } f
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Links: Auto-Next",
+  description: "Auto npm run dev in nextjs project-> Links page",
+
+}
 
 export default function LinksPage() {
   return (
