@@ -34,8 +34,11 @@ export default function RootLayout({
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
-      ><HeaderComp/>
+      >
+        <HeaderComp/>
+        <div className="mt-20 mb:mt-7"></div>
           {children}
+          <div className="mt-20 mb:mt-7"></div>
           <Footer/>
         </ThemeProvider>
       </body>

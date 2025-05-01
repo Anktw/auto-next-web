@@ -28,7 +28,7 @@ export function HeroSection() {
             </Button>
           </Link>
         </div>
-        <div className="mt-8 w-full max-w-3xl overflow-hidden rounded-lg border shadow-xl">
+        <div className="mt-8 w-full max-w-3xl overflow-hidden rounded-lg border shadow-xl bg-primary dark:bg-background">
           <Image
             src="/images/mainpage.png"
             width={1200}

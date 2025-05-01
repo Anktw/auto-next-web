@@ -5,7 +5,7 @@ import Image from "next/image"
 export function Footer() {
   return (
     <footer className="border-t bg-muted/40">
-      <div className="container py-8 mx-auto">
+      <div className="container py-8 mx-auto mt-6">
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
@@ -84,14 +84,14 @@ export function Footer() {
                 className="text-muted-foreground transition-colors hover:text-foreground items-center justify-center"
                 target="_blank"
               >
-                <Image src="/vercel.svg" alt={"Portfolio"} width={16} height={16} >
-                </Image>
-                <span className="sr-only">Porfolio</span>
+                <svg className="h-5 w-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000">
+                  <path d="m577.3 0 577.4 1000H0z" />
+                </svg>
+                <span className="sr-only">Portfolio</span>
               </a>
             </div>
           </div>
         </div>
-
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} unkit.vercel.app. All rights reserved.</p>
         </div>

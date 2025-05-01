@@ -3,11 +3,19 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { fetchWithAuth } from "@/utils/fetchWithAuth"
+import { SettingsButton } from "./settings-button"
 
 const webpages = ["Features", "Links", "Extension"].map((name) => ({
   name,
   path: `/${name.toLowerCase()}`,
 }))
+type User = {
+  email: string
+  username: string
+  first_name?: string
+  last_name?: string
+}
 
 const HeaderComp = () => {
   const pathname = usePathname()
@@ -17,6 +25,9 @@ const HeaderComp = () => {
   const [scrolled, setScrolled] = useState(false)
   const [scrollingUp, setScrollingUp] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset
     const currentScrollY = window.scrollY
@@ -50,6 +61,7 @@ const HeaderComp = () => {
       setIsOpen(false)
     }
   }, [isOpen])
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
@@ -65,22 +77,34 @@ const HeaderComp = () => {
     }
   }, [closeMenuOnScroll, closeMenuOnResize])
 
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetchWithAuth("/api/user/me")
+        if (!res.ok) throw new Error("Not authorized")
+        const data = await res.json()
+        setUser(data)
+      } catch {
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
   return (
     <header
-      className={`fixed top-0 z-30 transition-all duration-300 ease-in-out ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      } ${scrollingUp && scrolled ? "w-[90%] mx-auto left-0 right-0 rounded-b-xl shadow-lg" : "w-full shadow-md"}`}
+      className={`fixed top-0 z-30 transition-all duration-300 ease-in-out ${visible ? "translate-y-0" : "-translate-y-full"
+        } ${scrollingUp && scrolled ? "w-[90%] mx-auto left-0 right-0 rounded-b-xl shadow-lg" : "w-full shadow-md"}`}
     >
       <div
-        className={`backdrop-blur-xl flex justify-between items-center px-6 py-4 md:px-12 ${
-          scrolled ? "p-2 border-2 rounded-b-lg" : "p-4"
-        }`}
+        className={`backdrop-blur-xl flex justify-between items-center px-6 py-4 md:px-12 ${scrolled ? "p-2 border-2 rounded-b-lg" : "p-4"
+          }`}
       >
         {/* Logo */}
         <div
-          className={`text-2xl md:text-3xl lg:text-4xl left-0 transition-all duration-400 font-medium ${
-            scrolled ? "scale-90" : "scale-100"
-          }`}
+          className={`text-2xl md:text-3xl lg:text-4xl left-0 transition-all duration-400 font-medium ${scrolled ? "scale-90" : "scale-100"
+            }`}
         >
           <Link href="/" className={`${pathname === "/" ? "cursor-auto" : ""}`}>
             Auto-Next
@@ -89,32 +113,40 @@ const HeaderComp = () => {
 
         {/* Desktop Navigation */}
         <nav
-          className={`hidden md:flex items-center gap-8 ${
-            scrolled ? "space-x-2 md:space-x-2 lg:space-x-4" : "space-x-0 md:space-x-3 lg:space-x-6"
-          }`}
+          className={`hidden md:flex items-center gap-8 ${scrolled ? "space-x-2 md:space-x-2 lg:space-x-4" : "space-x-0 md:space-x-3 lg:space-x-6"
+            }`}
         >
           {webpages.map(({ name, path }) => (
             <Link
               key={name}
               href={path}
-              className={`text-gray-300 hover:text-white transition ${scrolled ? "text-base" : "text-lg"} ${
-                pathname === path ? "opacity-80 cursor-pointer" : ""
-              }`}
+              className={`hover:text-secondary-foreground transition ${scrolled ? "text-base" : "text-lg"} ${pathname === path ? "opacity-80 cursor-pointer" : ""
+                }`}
             >
               {name}
             </Link>
           ))}
         </nav>
+        {/* User/Login Section */}
+        <SettingsButton/>
         <div className="hidden md:flex items-center gap-4">
-          <a href="https://accounts-unkit.vercel.app/auth/user/login" className="text-gray-300 hover:text-white transition">
-            Login
-          </a>
-          <a
-            href="https://accounts-unkit.vercel.app/auth/user/signup"
-            className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
-          >
-            Sign Up
-          </a>
+          {loading ? (
+            <span>Loading...</span>
+          ) : user ? (
+            <span>Hello, {user.username}</span>
+          ) : (
+            <>
+              <a href="https://accounts-unkit.vercel.app/auth/user/login" className="text-gray-300 hover:text-white transition">
+                Login
+              </a>
+              <a
+                href="https://accounts-unkit.vercel.app/auth/user/signup"
+                className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
+              >
+                Sign Up
+              </a>
+            </>
+          )}
         </div>
         {/* Burger Menu Button */}
         <button
@@ -126,19 +158,16 @@ const HeaderComp = () => {
           aria-label="Menu"
         >
           <span
-            className={`absolute h-0.5 w-6 bg-foreground transform transition-all duration-300 ease-in-out ${
-              isOpen ? "rotate-45" : "-translate-y-2"
-            }`}
+            className={`absolute h-0.5 w-6 bg-foreground transform transition-all duration-300 ease-in-out ${isOpen ? "rotate-45" : "-translate-y-2"
+              }`}
           ></span>
           <span
-            className={`absolute h-0.5 w-6 bg-foreground transform transition-all duration-300 ease-in-out ${
-              isOpen ? "opacity-0" : "opacity-100"
-            }`}
+            className={`absolute h-0.5 w-6 bg-foreground transform transition-all duration-300 ease-in-out ${isOpen ? "opacity-0" : "opacity-100"
+              }`}
           ></span>
           <span
-            className={`absolute h-0.5 w-6 bg-foreground transform transition-all duration-300 ease-in-out ${
-              isOpen ? "-rotate-45" : "translate-y-2"
-            }`}
+            className={`absolute h-0.5 w-6 bg-foreground transform transition-all duration-300 ease-in-out ${isOpen ? "-rotate-45" : "translate-y-2"
+              }`}
           ></span>
         </button>
       </div>
@@ -160,6 +189,25 @@ const HeaderComp = () => {
                 {name}
               </Link>
             ))}
+            <div className="flex md:hidden items-center gap-4">
+          {loading ? (
+            <span>Loading...</span>
+          ) : user ? (
+            <span className="text-gray-300">Hello, {user.username}</span>
+          ) : (
+            <>
+              <a href="https://accounts-unkit.vercel.app/auth/user/login" className="text-gray-300 hover:text-white transition">
+                Login
+              </a>
+              <a
+                href="https://accounts-unkit.vercel.app/auth/user/signup"
+                className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
+              >
+                Sign Up
+              </a>
+            </>
+          )}
+        </div>
           </nav>
         </div>
       )}

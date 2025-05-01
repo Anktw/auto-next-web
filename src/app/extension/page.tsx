@@ -5,6 +5,12 @@ import { ArrowLeft, ArrowRight, Check, Code, Download, FileCode, Settings, Githu
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Extensions: Auto-Next",
+  description: "Auto npm run dev in nextjs project-> Extension page",
+};
 
 export default function ExtensionPage() {
   return (

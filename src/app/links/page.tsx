@@ -60,7 +60,7 @@ export default function LinksPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Get the latest version of NextDev Launcher from the official Visual Studio Code Marketplace.
+                  Get the latest version from the official Visual Studio Code Marketplace.
                 </p>
               </CardContent>
               <CardFooter>
@@ -87,7 +87,7 @@ export default function LinksPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Explore my portfolio to see other projects and tools I've created for developers.
+                  Explore my portfolio
                 </p>
               </CardContent>
               <CardFooter>
@@ -110,7 +110,7 @@ export default function LinksPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Follow me on Twitter for announcements about new features, updates, and other developer tools.
+                  Follow me on Twitter
                 </p>
               </CardContent>
               <CardFooter>
@@ -133,7 +133,7 @@ export default function LinksPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Have questions, feedback, or feature requests? Feel free to reach out.
+                  Feel free to reach out.
                 </p>
               </CardContent>
               <CardFooter>
