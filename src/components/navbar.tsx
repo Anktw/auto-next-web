@@ -10,6 +10,7 @@ const webpages = ["Features", "Links", "Extension"].map((name) => ({
   name,
   path: `/${name.toLowerCase()}`,
 }))
+
 type User = {
   email: string
   username: string
@@ -27,6 +28,9 @@ const HeaderComp = () => {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [signupHref, setSignupHref] = useState("https://accounts.unkit.site/auth/user/signup")
+  const [loginHref, setLoginHref] = useState("https://accounts.unkit.site/auth/user/login")
+
 
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset
@@ -92,6 +96,13 @@ const HeaderComp = () => {
     load()
   }, [])
 
+  useEffect(() => {
+    const currentUrl = window.location.href
+    const encodedRedirect = encodeURIComponent(currentUrl)
+    setSignupHref(`https://accounts.unkit.site/auth/user/signup?redirect=${encodedRedirect}`)
+    setLoginHref(`https://accounts.unkit.site/auth/user/login?redirect=${encodedRedirect}`)
+  }, [])
+
   return (
     <header
       className={`fixed top-0 z-30 transition-all duration-300 ease-in-out ${visible ? "translate-y-0" : "-translate-y-full"
@@ -136,11 +147,11 @@ const HeaderComp = () => {
             <span>Hello, {user.username}</span>
           ) : (
             <>
-              <a href="https://accounts-unkit.vercel.app/auth/user/login" className="text-gray-300 hover:text-white transition">
+              <a href={loginHref} className="text-gray-300 hover:text-white transition">
                 Login
               </a>
               <a
-                href="https://accounts-unkit.vercel.app/auth/user/signup"
+                href={signupHref}
                 className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
               >
                 Sign Up
