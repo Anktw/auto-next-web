@@ -30,7 +30,7 @@ const HeaderComp = () => {
   const [loading, setLoading] = useState(true)
   const [signupHref, setSignupHref] = useState("https://accounts.unkit.site/auth/user/signup")
   const [loginHref, setLoginHref] = useState("https://accounts.unkit.site/auth/user/login")
-
+  const [cachedUsername, setCachedUsername] = useState<string | null>(null)
 
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset
@@ -82,12 +82,26 @@ const HeaderComp = () => {
   }, [closeMenuOnScroll, closeMenuOnResize])
 
   useEffect(() => {
+    const cached = localStorage.getItem("cachedUsername")
+    if (cached) {
+      setCachedUsername(cached)
+      setUser((prev) => ({
+        email: "",
+        username: cached,
+        first_name: "",
+        last_name: "",
+        ...prev,
+      }))
+      setLoading(false)
+    }
+
     async function load() {
       try {
         const res = await fetchWithAuth("/api/user/me")
         if (!res.ok) throw new Error("Not authorized")
         const data = await res.json()
         setUser(data)
+        localStorage.setItem("cachedUsername", data.username)
       } catch {
       } finally {
         setLoading(false)
@@ -145,6 +159,8 @@ const HeaderComp = () => {
             <span>Loading...</span>
           ) : user ? (
             <span>Hello, {user.username}</span>
+          ) : cachedUsername ? (
+            <span>Hello, {cachedUsername}</span>
           ) : (
             <>
               <a href={loginHref} className="text-gray-300 hover:text-white transition">
@@ -205,6 +221,8 @@ const HeaderComp = () => {
             <span>Loading...</span>
           ) : user ? (
             <span className="text-gray-300">Hello, {user.username}</span>
+          ) : cachedUsername ? (
+            <span className="text-gray-300">Hello, {cachedUsername}</span>
           ) : (
             <>
               <a href="https://accounts-unkit.vercel.app/auth/user/login" className="text-gray-300 hover:text-white transition">
