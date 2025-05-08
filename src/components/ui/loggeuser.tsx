@@ -87,7 +87,7 @@ export default function LoggedUser(){
     <div className="hidden md:flex items-center gap-4">
         {loading ? (
             cachedUsername ? (
-              <span className="text-gray-300">Hello {cachedUsername}</span>
+              <span className="text-gray-300"><Skeleton className="h-6 w-24" /></span>
             ) : (
               <span><Skeleton className="h-6 w-24" /></span>
             )
