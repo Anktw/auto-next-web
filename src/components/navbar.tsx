@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { SettingsButton } from "./settings-button"
-import LoggedUser from "./ui/loggeuser"
+import LoggedUser from "./ui/loggeduser"
 
 
 const webpages = ["Features", "Links", "Extension"].map((name) => ({

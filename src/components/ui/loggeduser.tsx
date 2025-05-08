@@ -96,15 +96,17 @@ export default function LoggedUser(){
           ) : (
             <>
               <>
+              <div className="flex flex-col md:flex-row items-center gap-4">
               <a href={loginHref} className="text-gray-300 hover:text-white transition">
                 Login
-              </a>
+              </a> 
               <a
                 href={signupHref}
                 className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
               >
                 Sign Up
               </a>
+              </div>
             </>
             </>
           )}
