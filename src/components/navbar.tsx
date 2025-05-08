@@ -32,6 +32,8 @@ const HeaderComp = () => {
   const [signupHref, setSignupHref] = useState("https://accounts.unkit.site/auth/user/signup")
   const [loginHref, setLoginHref] = useState("https://accounts.unkit.site/auth/user/login")
   const [cachedUsername, setCachedUsername] = useState<string | null>(null)
+  const maxRetries = 3;
+  const retryDelay = 2000; // 2 seconds
 
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset
@@ -87,22 +89,35 @@ const HeaderComp = () => {
     if (cached) {
       setCachedUsername(cached)
     }
+    let cancelled = false;
 
-    async function load() {
+    async function load(retryCount = 0) {
       try {
         const res = await fetchWithAuth("/api/user/me")
         if (!res.ok) {
+          if (cached && retryCount < maxRetries) {
+            setTimeout(() => {
+              if (!cancelled) {
+                load(retryCount + 1)
+              }
+            }, retryDelay)
+            return
+          }
           setCachedUsername(null)
           setUser(null)
+          setLoading(false)
           return
         }
         const data = await res.json()
         setUser(data)
-      } finally {
+        setLoading(false)
+      } catch {
         setLoading(false)
       }
     }
     load()
+    return () => { cancelled = true }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -150,13 +165,15 @@ const HeaderComp = () => {
         {/* User/Login Section */}
         <SettingsButton/>
         <div className="hidden md:flex items-center gap-4">
-          {loading ? (
-            <Skeleton className="h-6 w-24" />
-          ) : user ? (
-            <span>Hello, {user.username}</span>
-          ) : cachedUsername ? (
-            <span>Hello, {cachedUsername}</span>
-          ) : (
+        {loading ? (
+        cachedUsername ? (
+          <span>Hello {cachedUsername}</span>
+        ) : (
+          <span><Skeleton className="h-6 w-24" /></span>
+        )
+      ) : user ? (
+        <span>Hello {user.username}</span>
+      ) : (
             <>
               <a href={loginHref} className="text-gray-300 hover:text-white transition">
                 Login
