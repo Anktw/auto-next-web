@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { fetchWithAuth } from "@/utils/fetchWithAuth";
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 
 type User = {
   email: string
@@ -84,7 +84,7 @@ export default function LoggedUser(){
   }
 
   return(
-    <div className="hidden md:flex items-center gap-4">
+    <div>
         {loading ? (
             cachedUsername ? (
               <span className="text-gray-300"><Skeleton className="h-6 w-24" /></span>

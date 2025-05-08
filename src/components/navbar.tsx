@@ -75,7 +75,7 @@ const HeaderComp = () => {
     }
   }, [closeMenuOnScroll, closeMenuOnResize])
 
-  
+
 
   return (
     <header
@@ -113,8 +113,9 @@ const HeaderComp = () => {
           ))}
         </nav>
         {/* User/Login Section */}
-        <SettingsButton/>
-        <LoggedUser/>
+        <SettingsButton />
+        <div className="hidden md:block"><LoggedUser /></div>
+        
         {/* Burger Menu Button */}
         <button
           className="relative w-8 h-8 md:hidden z-50 animate-fadeInRight justify-center align-middle cursor-pointer"
@@ -156,9 +157,10 @@ const HeaderComp = () => {
                 {name}
               </Link>
             ))}
-            <div className="flex md:hidden items-center gap-4">
-          <LoggedUser/>
-        </div>
+            <div className="block md:hidden">
+              <LoggedUser />
+            </div>
+            
           </nav>
         </div>
       )}
