@@ -3,21 +3,15 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { fetchWithAuth } from "@/utils/fetchWithAuth"
 import { SettingsButton } from "./settings-button"
-import { Skeleton } from "@/components/ui/skeleton"
+import LoggedUser from "./ui/loggeuser"
+
 
 const webpages = ["Features", "Links", "Extension"].map((name) => ({
   name,
   path: `/${name.toLowerCase()}`,
 }))
 
-type User = {
-  email: string
-  username: string
-  first_name?: string
-  last_name?: string
-}
 
 const HeaderComp = () => {
   const pathname = usePathname()
@@ -27,10 +21,7 @@ const HeaderComp = () => {
   const [scrolled, setScrolled] = useState(false)
   const [scrollingUp, setScrollingUp] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [signupHref, setSignupHref] = useState("https://accounts.unkit.site/auth/user/signup")
-  const [loginHref, setLoginHref] = useState("https://accounts.unkit.site/auth/user/login")
+
   const [cachedUsername, setCachedUsername] = useState<string | null>(null)
   const maxRetries = 3;
   const retryDelay = 2000; // 2 seconds
@@ -84,48 +75,7 @@ const HeaderComp = () => {
     }
   }, [closeMenuOnScroll, closeMenuOnResize])
 
-  useEffect(() => {
-    const cached = localStorage.getItem("cachedUsername")
-    if (cached) {
-      setCachedUsername(cached)
-    }
-    let cancelled = false;
-
-    async function load(retryCount = 0) {
-      try {
-        const res = await fetchWithAuth("/api/user/me")
-        if (!res.ok) {
-          if (cached && retryCount < maxRetries) {
-            setTimeout(() => {
-              if (!cancelled) {
-                load(retryCount + 1)
-              }
-            }, retryDelay)
-            return
-          }
-          setCachedUsername(null)
-          setUser(null)
-          setLoading(false)
-          return
-        }
-        const data = await res.json()
-        setUser(data)
-        setLoading(false)
-      } catch {
-        setLoading(false)
-      }
-    }
-    load()
-    return () => { cancelled = true }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    const currentUrl = window.location.href
-    const encodedRedirect = encodeURIComponent(currentUrl)
-    setSignupHref(`https://accounts.unkit.site/auth/user/signup?redirect=${encodedRedirect}`)
-    setLoginHref(`https://accounts.unkit.site/auth/user/login?redirect=${encodedRedirect}`)
-  }, [])
+  
 
   return (
     <header
@@ -164,29 +114,7 @@ const HeaderComp = () => {
         </nav>
         {/* User/Login Section */}
         <SettingsButton/>
-        <div className="hidden md:flex items-center gap-4">
-        {loading ? (
-        cachedUsername ? (
-          <span>Hello {cachedUsername}</span>
-        ) : (
-          <span><Skeleton className="h-6 w-24" /></span>
-        )
-      ) : user ? (
-        <span>Hello {user.username}</span>
-      ) : (
-            <>
-              <a href={loginHref} className="text-gray-300 hover:text-white transition">
-                Login
-              </a>
-              <a
-                href={signupHref}
-                className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
-              >
-                Sign Up
-              </a>
-            </>
-          )}
-        </div>
+        <LoggedUser/>
         {/* Burger Menu Button */}
         <button
           className="relative w-8 h-8 md:hidden z-50 animate-fadeInRight justify-center align-middle cursor-pointer"
@@ -229,25 +157,7 @@ const HeaderComp = () => {
               </Link>
             ))}
             <div className="flex md:hidden items-center gap-4">
-          {loading ? (
-            <Skeleton className="h-6 w-24" />
-          ) : user ? (
-            <span className="text-gray-300">Hello, {user.username}</span>
-          ) : cachedUsername ? (
-            <span className="text-gray-300">Hello, {cachedUsername}</span>
-          ) : (
-            <>
-              <a href="https://accounts-unkit.vercel.app/auth/user/login" className="text-gray-300 hover:text-white transition">
-                Login
-              </a>
-              <a
-                href="https://accounts-unkit.vercel.app/auth/user/signup"
-                className="bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition"
-              >
-                Sign Up
-              </a>
-            </>
-          )}
+          <LoggedUser/>
         </div>
           </nav>
         </div>
