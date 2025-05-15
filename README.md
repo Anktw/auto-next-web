@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# auto-next-web
 
-## Getting Started
+A Next.js web application with modern UI components and features
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Built with Next.js 15.3.1
+- It's a website for the auto-next project
+- visit - vscode extension repo for auto-next vs code extension - https://github.com/anktw/auto-next
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework:** Next.js 15.3.1
+- **UI Components:** Shadcn UI
+- **Styling:** Tailwind CSS
+- **Icons:** Lucide React
+- **Cookie Management:** js-cookie
+- **JWT:** jwt-decode
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18.0 or later
+- npm or yarn
+- Git
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository
+   ```bash
+   git clone https://github.com/anktw/auto-next-web.git
+   cd auto-next-web
+   ```
 
-## Deploy on Vercel
+2. Install dependencies
+   ```bash
+   npm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Copy the .env.example file to .env and add your backend url (Optional)
+   ```bash
+   cp .env.example .env
+   ```
+   add your backend url to the .env file
+   ```bash
+   FAST_URL=your-backend-url
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Run the development server
+   ```bash
+   npm run dev
+   ```
+
+5. Open your browser
+   Visit [http://localhost:3000](http://localhost:3000) to see your application running.
+
+
+
+## Acknowledgments
+
+- [Next.js](https://nextjs.org/)
+- [Shadcn UI](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Lucide React](https://lucide.dev/)
+- [js-cookie](https://github.com/js-cookie/js-cookie)
+
+
+## Author
+Made with ❤️ by [Unkit](https://github.com/anktw)
