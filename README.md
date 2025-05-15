@@ -6,7 +6,7 @@ A Next.js web application with modern UI components and features
 
 - Built with Next.js 15.3.1
 - It's a website for the auto-next project
-- visit - vscode extension repo for auto-next vs code extension - https://github.com/anktw/auto-next
+- visit - vscode extension repo for which this is made - https://github.com/anktw/auto-next
 
 ## Tech Stack
 
